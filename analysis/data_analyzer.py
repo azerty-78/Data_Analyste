@@ -6,23 +6,99 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import re
+import os
+import json
 
 # Force le chemin NLTK
 nltk.data.path.append(r'C:\\Users\\Ben Djibril\\AppData\\Roaming\\nltk_data')
 
 class DataAnalyzer:
     def __init__(self):
+        # Configuration du chemin NLTK
+        nltk_data_path = os.path.join(os.path.expanduser("~"), "nltk_data")
+        if not os.path.exists(nltk_data_path):
+            os.makedirs(nltk_data_path)
+        nltk.data.path.append(nltk_data_path)
+        
         # Téléchargement des ressources NLTK nécessaires
-        try:
-            nltk.data.find('tokenizers/punkt')
-        except LookupError:
-            nltk.download('punkt')
-        try:
-            nltk.data.find('corpora/stopwords')
-        except LookupError:
-            nltk.download('stopwords')
-            
+        required_nltk_resources = ['punkt', 'stopwords', 'averaged_perceptron_tagger', 'wordnet']
+        for resource in required_nltk_resources:
+            try:
+                nltk.data.find(f'tokenizers/{resource}' if resource == 'punkt' else f'corpora/{resource}')
+            except LookupError:
+                nltk.download(resource, download_dir=nltk_data_path)
+                
         self.stop_words = set(stopwords.words('french'))
+        self.suggestions_cache = {}
+        
+    def get_suggestions(self, df):
+        """
+        Génère des suggestions d'analyse basées sur les données
+        """
+        if df is None or df.empty:
+            return []
+            
+        # Création d'une clé unique pour le cache
+        cache_key = hash(str(df.columns.tolist()) + str(df.dtypes.tolist()))
+        
+        # Vérification du cache
+        if cache_key in self.suggestions_cache:
+            return self.suggestions_cache[cache_key]
+            
+        suggestions = []
+        
+        # Analyse des colonnes numériques
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        if len(numeric_cols) > 0:
+            suggestions.append({
+                'type': 'distribution',
+                'title': 'Distribution des valeurs numériques',
+                'description': 'Visualiser la distribution des valeurs numériques',
+                'columns': numeric_cols.tolist()
+            })
+            
+            if len(numeric_cols) > 1:
+                suggestions.append({
+                    'type': 'correlation',
+                    'title': 'Corrélations entre variables',
+                    'description': 'Analyser les corrélations entre les variables numériques',
+                    'columns': numeric_cols.tolist()
+                })
+        
+        # Analyse des colonnes catégorielles
+        categorical_cols = df.select_dtypes(include=['object']).columns
+        if len(categorical_cols) > 0:
+            for col in categorical_cols:
+                unique_values = df[col].nunique()
+                if unique_values < 10:  # Pour les colonnes avec peu de valeurs uniques
+                    suggestions.append({
+                        'type': 'pie',
+                        'title': f'Répartition de {col}',
+                        'description': f'Visualiser la répartition des valeurs de {col}',
+                        'columns': [col]
+                    })
+                else:
+                    suggestions.append({
+                        'type': 'bar',
+                        'title': f'Top 10 de {col}',
+                        'description': f'Visualiser les 10 valeurs les plus fréquentes de {col}',
+                        'columns': [col]
+                    })
+        
+        # Analyse des relations entre colonnes
+        if len(categorical_cols) > 1:
+            for i, col1 in enumerate(categorical_cols):
+                for col2 in categorical_cols[i+1:]:
+                    suggestions.append({
+                        'type': 'comparison',
+                        'title': f'Relation entre {col1} et {col2}',
+                        'description': f'Analyser la relation entre {col1} et {col2}',
+                        'columns': [col1, col2]
+                    })
+        
+        # Mise en cache des suggestions
+        self.suggestions_cache[cache_key] = suggestions
+        return suggestions
         
     def analyze(self, df, query):
         """
@@ -177,10 +253,19 @@ class DataAnalyzer:
         Détecte le type de graphique demandé dans la requête utilisateur
         """
         query = query.lower()
-        if any(word in query for word in ["camembert", "cercle", "circulaire", "pie"]):
-            return "pie"
-        if any(word in query for word in ["barres", "histogramme", "bar", "colonnes"]):
-            return "bar"
-        if any(word in query for word in ["ligne", "line"]):
-            return "line"
+        
+        # Mots-clés pour chaque type de graphique
+        chart_keywords = {
+            'pie': ["camembert", "cercle", "circulaire", "pie", "répartition", "pourcentage"],
+            'bar': ["barres", "histogramme", "bar", "colonnes", "fréquence", "nombre"],
+            'line': ["ligne", "line", "évolution", "tendance", "progression", "courbe"],
+            'scatter': ["nuage", "points", "scatter", "dispersion", "corrélation"],
+            'box': ["boîte", "box", "quartiles", "médiane", "distribution"]
+        }
+        
+        # Recherche des mots-clés dans la requête
+        for chart_type, keywords in chart_keywords.items():
+            if any(keyword in query for keyword in keywords):
+                return chart_type
+                
         return None 

@@ -1,9 +1,123 @@
-j'ai envie de creer un logiciel en python .exe qui permet de faire une analyse intelligentes des donnees dans un fichier excel pour en ressortir les points voulue
+# Analyse Intelligente de Données Excel - Guide d'Utilisation
 
-je veux une interface graphique intuitive qui permet a l'utilisateur d'importer sont tableau excel,
-l'utilisateur doit dire ce qu'il veut faire et le programme affiche des diagrammes consequent
+## Description du Projet
+Ce logiciel est une application Python qui permet d'effectuer une analyse intelligente des données Excel avec une interface graphique intuitive et moderne. Il utilise des techniques avancées de traitement du langage naturel et d'analyse de données pour fournir des visualisations pertinentes et des insights utiles.
 
-Tu dois creer une IA qui s'entraine sur les donnee que l'utilisateur met dans le fichier excel
+## Fonctionnalités Principales
 
-Dans ce fichier les enregistrements peuvent etre differente d'un point de vu d'equivalence de caractere  mais ont le meme sens ce qui peut rendre l'analyse moims presise, 
-Ce que tu dois faire c'est que tu dois faire une analyse des données pour regrouper les thèmes qui le peuvent comme ça on aura moins de réponse non précise tu dois aussi épuré les données du formulaire qui sont présentes dans le fichier Excel tu dois tout quantifier et éviter les doublons rentrer ça de manière logique plus tu étais enceinte que lorsque l'utilisateur va écrire ce qu'il veut c'est qu'il soit obtenir les diagrammes qu'il veut les cellules cibles même s'il ne précise pas les soldes cibles tu dois être à mesure de savoir tiens si je dois faire un diagramme sur une cellule qui concerne la localité et peut-être le type de culture je tu dois être à mesure de savoir où prendre les données et faire le diagramme pour ressortir ce que l'utilisateur l'utilisateur qu'est-ce qu'il fait lorsqu'il importe les données il écrit dans une zone de texte sur réservé ce qu'il veut faire par exemple il a envie de j'ai envie de visualiser les localités qu'il cultive plus maïs Majorque ou bien j'ai envie que tu me présente les localités et leurs cultures donc tu vois un peu l'utilisateur c'est-à-dire lorsqu'il est porté ses données le programme doit tout faire doit tout faire et afficher les diagrammes nécessaires de manière colorée de manière limpide je tiens aussi à mettre l'accent sur l'interface graphique parce que il faut que l'interface graphique soit limpide intuitive coloré bien designer utilise toutes les technologies de TKinter donc ce que tu vas faire c'est que tu vas crier tous les fichiers nécessaires dans chaque dossier nécessaire tu créeras tout ce qu'il faut dans un fichier recoemel tu crées tu mettras toutes les bibliothèques à utiliser oui et tu feras un fichier Readme
+### 1. Interface Graphique
+- Interface moderne et intuitive avec thème sombre/clair
+- Navigation par onglets pour une meilleure organisation :
+  * Onglet Données : Import et recherche
+  * Onglet Analyse : Requêtes et suggestions
+  * Onglet Visualisation : Affichage des graphiques
+- Barre de progression pour le suivi des opérations
+- Messages d'état en temps réel
+- Gestion des erreurs avec messages explicatifs
+- Icônes et éléments visuels pour une meilleure expérience utilisateur
+
+### 2. Importation et Prétraitement des Données
+- Support des fichiers Excel (.xlsx, .xls)
+- Détection automatique des colonnes
+- Nettoyage intelligent des données :
+  * Suppression des doublons
+  * Standardisation des valeurs
+  * Gestion des valeurs manquantes
+  * Normalisation des textes
+- Barre de recherche intégrée avec résultats en temps réel
+
+### 3. Analyse Intelligente
+- Suggestions automatiques basées sur le contenu des données :
+  * Analyse des types de colonnes (numériques, catégorielles)
+  * Détection des relations entre colonnes
+  * Recommandations de visualisations pertinentes
+- Analyse sémantique des requêtes utilisateur
+- Détection automatique des relations entre colonnes
+- Cache des suggestions pour de meilleures performances
+
+### 4. Visualisations
+- Diagrammes interactifs et personnalisables :
+  * Diagrammes en barres
+  * Diagrammes circulaires (camembert)
+  * Graphiques en ligne
+  * Nuages de points
+  * Diagrammes en boîte
+  * Matrices de corrélation
+- Types de graphiques intelligemment sélectionnés selon les données
+- Options de personnalisation :
+  * Palette de couleurs moderne et cohérente
+  * Styles adaptés au thème sombre
+  * Titres et légendes personnalisables
+- Export des graphiques en différents formats
+
+### 5. Fonctionnalités Avancées
+- Analyse de sentiment sur les données textuelles
+- Regroupement intelligent des catégories similaires
+- Détection automatique des tendances
+- Suggestions d'analyses complémentaires
+- Gestion optimisée des ressources NLTK
+
+## Installation
+
+### Prérequis
+- Python 3.8 ou supérieur
+- Bibliothèques requises (dans requirements.txt) :
+  * pandas>=2.2.0
+  * numpy>=1.26.0
+  * matplotlib>=3.8.0
+  * seaborn>=0.13.0
+  * scikit-learn>=1.4.0
+  * nltk>=3.8.1
+  * customtkinter>=5.2.0
+  * openpyxl>=3.1.2
+  * pillow>=10.2.0
+
+### Installation des Ressources NLTK
+```python
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('stopwords')
+```
+
+## Utilisation
+
+1. Lancez l'application
+2. Importez votre fichier Excel
+3. Consultez les suggestions d'analyse automatiques
+4. Utilisez la barre de recherche pour trouver des données spécifiques
+5. Entrez votre requête d'analyse ou sélectionnez une suggestion
+6. Visualisez les résultats dans l'onglet Visualisation
+
+## Structure du Projet
+```
+project/
+├── src/
+│   ├── main.py
+│   ├── gui/
+│   │   ├── main_window.py
+│   │   └── __init__.py
+│   ├── analysis/
+│   │   ├── data_analyzer.py
+│   │   ├── visualization.py
+│   │   └── __init__.py
+│   └── utils/
+│       ├── config.py
+│       └── helpers.py
+├── requirements.txt
+└── README.md
+```
+
+## Améliorations Futures
+- Support de plus de formats de fichiers
+- Intégration d'API externes pour des analyses plus poussées
+- Export des analyses en format PDF
+- Tableau de bord personnalisable
+- Mode hors ligne avec base de données locale
+- Support multilingue
+- Export des données analysées
+- Sauvegarde des configurations utilisateur
+
+## Support
+Pour toute question ou problème, veuillez consulter la documentation ou créer une issue sur le repository du projet.
