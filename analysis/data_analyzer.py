@@ -84,10 +84,7 @@ class DataAnalyzer:
         """
         Analyse la requête utilisateur pour comprendre l'intention
         """
-        # Tokenization
         tokens = word_tokenize(query.lower(), language='french')
-        
-        # Suppression des stop words
         tokens = [t for t in tokens if t not in self.stop_words]
         
         # Détection des mots-clés importants
